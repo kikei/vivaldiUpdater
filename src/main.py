@@ -99,7 +99,7 @@ class LibFFmpegClawler(object):
 def download_vivaldi(dest_dir):
   clawler = VivaldiClawler()
   url = clawler.get_download_link_for(['x86_64', 'rpm'])
-  filename = make_filename(url, download_dir)
+  filename = make_filename(url, dest_dir)
   if os.path.isfile(filename):
     return None
   download_to(url, filename)
@@ -108,14 +108,14 @@ def download_vivaldi(dest_dir):
 def download_libffmpeg(dest_dir):
   clawler = LibFFmpegClawler(LIBFFMPEG_URL)
   url = clawler.get_download_link_for(['linux', 'x64'])
-  filename = make_filename(url, download_dir)
+  filename = make_filename(url, dest_dir)
   if os.path.isfile(filename):
     return None
   download_to(url, filename)
   zipFile = zipfile.ZipFile(filename)
-  zipFile.extract('libffmpeg.so', download_dir)
+  zipFile.extract('libffmpeg.so', dest_dir)
   zipFile.close()
-  filename = os.path.join(download_dir, 'libffmpeg.so')
+  filename = os.path.join(dest_dir, 'libffmpeg.so')
   return filename
 
 def main():
@@ -140,7 +140,7 @@ def main():
     script = '''
 #!/bin/sh
 
-sudo -- -c sh '{command}'
+sudo -- sh -c '{command}'
 '''.strip()
     script = script.format(command='; '.join(commands))
     print(script)
